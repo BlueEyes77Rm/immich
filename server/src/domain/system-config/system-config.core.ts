@@ -33,7 +33,7 @@ export const defaults = Object.freeze<SystemConfig>({
     targetVideoCodec: VideoCodec.H264,
     acceptedVideoCodecs: [VideoCodec.H264],
     targetAudioCodec: AudioCodec.AAC,
-    acceptedAudioCodecs: [AudioCodec.AAC],
+    acceptedAudioCodecs: [AudioCodec.AAC, AudioCodec.MP3, AudioCodec.LIBOPUS],
     targetResolution: '720',
     maxBitrate: '0',
     bframes: -1,
@@ -230,8 +230,6 @@ export class SystemConfigCore {
       [FeatureFlag.SIDECAR]: true,
       [FeatureFlag.SEARCH]: true,
       [FeatureFlag.TRASH]: config.trash.enabled,
-
-      // TODO: use these instead of `POST oauth/config`
       [FeatureFlag.OAUTH]: config.oauth.enabled,
       [FeatureFlag.OAUTH_AUTO_LAUNCH]: config.oauth.autoLaunch,
       [FeatureFlag.PASSWORD_LOGIN]: config.passwordLogin.enabled,

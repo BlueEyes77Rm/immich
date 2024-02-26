@@ -1,7 +1,7 @@
-import { AssetResponseDto } from '@app/domain';
+import { AssetBulkDeleteDto, AssetResponseDto } from '@app/domain';
 import { CreateAssetDto } from '@app/immich/api-v1/asset/dto/create-asset.dto';
 import { AssetFileUploadResponseDto } from '@app/immich/api-v1/asset/response-dto/asset-file-upload-response.dto';
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'node:crypto';
 import request from 'supertest';
 
 type UploadDto = Partial<CreateAssetDto> & { content?: Buffer; filename?: string };
@@ -34,9 +34,7 @@ export const assetApi = {
     return body as AssetResponseDto;
   },
   get: async (server: any, accessToken: string, id: string): Promise<AssetResponseDto> => {
-    const { body, status } = await request(server)
-      .get(`/asset/assetById/${id}`)
-      .set('Authorization', `Bearer ${accessToken}`);
+    const { body, status } = await request(server).get(`/asset/${id}`).set('Authorization', `Bearer ${accessToken}`);
     expect(status).toBe(200);
     return body as AssetResponseDto;
   },
@@ -75,5 +73,9 @@ export const assetApi = {
       .set('Authorization', `Bearer ${accessToken}`);
     expect(status).toBe(200);
     return body;
+  },
+  delete: async (server: any, accessToken: string, dto: AssetBulkDeleteDto) => {
+    const { status } = await request(server).delete('/asset').set('Authorization', `Bearer ${accessToken}`).send(dto);
+    expect(status).toBe(204);
   },
 };
