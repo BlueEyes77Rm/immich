@@ -3,6 +3,7 @@
   import { createEventDispatcher } from 'svelte';
   import ConfirmDialogue from './confirm-dialogue.svelte';
   import Map from './map/map.svelte';
+  import SearchLocation from './map/search-location.svelte';
   export const title = 'Change Location';
   export let asset: AssetResponseDto | undefined = undefined;
 
@@ -46,7 +47,16 @@
   on:cancel={handleCancel}
 >
   <div slot="prompt" class="flex flex-col w-full h-full gap-2">
-    <label for="datetime">Pick a location</label>
+    <label for="datetime">Pick or search a location</label>
+    <div class="h-[100px] min-h-[100px] w-full">
+      <SearchLocation
+        on:locationSelected={({ detail: point }) => {
+          lat = point.lat;
+          lng = point.lng;
+          handleSelect(point);
+        }}
+      />
+    </div>
     <div class="h-[500px] min-h-[300px] w-full">
       <Map
         mapMarkers={lat && lng && asset ? [{ id: asset.id, lat, lon: lng }] : []}
